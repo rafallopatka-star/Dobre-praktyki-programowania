@@ -1,7 +1,4 @@
-"""
-Flask API - Producer
-Endpoint /analyze_img that receives image URL and queues analysis task
-"""
+
 from flask import Flask, request, jsonify
 import redis
 import uuid
@@ -15,10 +12,7 @@ redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=T
 
 @app.route('/analyze_img', methods=['GET', 'POST'])
 def analyze_img():
-    """
-    Endpoint that receives image URL and queues it for analysis
-    Returns task_id for tracking the analysis
-    """
+    
     try:
         # Get image URL from request
         if request.method == 'POST':

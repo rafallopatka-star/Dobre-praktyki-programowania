@@ -1,8 +1,4 @@
-"""
-Consumer - Worker Process
-Processes images from queue and detects people using HOG detector
-Can be run multiple times to scale horizontally
-"""
+
 import redis
 import json
 import cv2
@@ -21,7 +17,7 @@ hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
 
 def download_image(url):
-    """Download image from URL"""
+    
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
@@ -33,7 +29,7 @@ def download_image(url):
 
 
 def detect_people(image):
-    """Detect people in image using HOG detector"""
+    
     try:
         # Resize for faster detection
         height, width = image.shape[:2]
@@ -59,7 +55,7 @@ def detect_people(image):
 
 
 def process_task(task_data):
-    """Process a single task"""
+    
     task_id = task_data['task_id']
     image_url = task_data['image_url']
     
