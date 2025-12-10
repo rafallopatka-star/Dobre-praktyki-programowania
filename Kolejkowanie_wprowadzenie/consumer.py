@@ -1,8 +1,3 @@
-"""
-Consumer - odpowiedzialny za wykonywanie prac z kolejki.
-Działa w trybie ciągłym (while True), co 5 sekund sprawdza kolejkę.
-Wykonanie każdej pracy trwa 30 sekund.
-"""
 import csv
 import os
 import time

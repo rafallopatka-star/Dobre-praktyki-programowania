@@ -1,7 +1,3 @@
-"""
-Producer - odpowiedzialny za zapisywanie prac (rozmów telefonicznych) do pliku CSV.
-Każda praca ma status: pending, in_progress, done
-"""
 import csv
 import os
 import uuid
@@ -9,28 +5,21 @@ from datetime import datetime
 import argparse
 import filelock
 
-# Nazwa pliku z kolejką zadań
+
 QUEUE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "queue.csv")
 LOCK_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "queue.lock")
 
 def get_lock():
-    """Zwraca obiekt blokady pliku dla bezpiecznego dostępu wieloprocesowego."""
+    
     return filelock.FileLock(LOCK_FILE, timeout=10)
 
 def init_queue_file():
-    """Inicjalizuje plik kolejki z nagłówkami, jeśli nie istnieje."""
     if not os.path.exists(QUEUE_FILE):
         with open(QUEUE_FILE, 'w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow(['id', 'task_name', 'status', 'created_at', 'started_at', 'finished_at'])
 
 def add_task(task_name: str = None) -> dict:
-    """
-    Dodaje nowe zadanie (rozmowę telefoniczną) do kolejki.
-    
-    :param task_name: Nazwa zadania (opcjonalna, jeśli nie podana - generowana automatycznie)
-    :return: Słownik z danymi dodanego zadania
-    """
     lock = get_lock()
     
     with lock:
@@ -60,12 +49,6 @@ def add_task(task_name: str = None) -> dict:
         return task
 
 def add_multiple_tasks(count: int) -> list:
-    """
-    Dodaje wiele zadań do kolejki.
-    
-    :param count: Liczba zadań do dodania
-    :return: Lista dodanych zadań
-    """
     tasks = []
     for i in range(1, count + 1):
         task_name = f"Rozmowa telefoniczna #{i}"
@@ -74,7 +57,6 @@ def add_multiple_tasks(count: int) -> list:
     return tasks
 
 def show_queue_status():
-    """Wyświetla aktualny status kolejki."""
     if not os.path.exists(QUEUE_FILE):
         print("[PRODUCER] Kolejka jest pusta.")
         return
@@ -96,7 +78,6 @@ def show_queue_status():
         print(f"  RAZEM:                   {len(tasks)}")
 
 def clear_queue():
-    """Czyści kolejkę (usuwa plik)."""
     if os.path.exists(QUEUE_FILE):
         os.remove(QUEUE_FILE)
         print("[PRODUCER] Kolejka została wyczyszczona.")
